@@ -49,7 +49,6 @@ export default class Login {
       password: e.target.querySelector(`input[data-testid="admin-password-input"]`).value,
       status: "connected"
     }
-    console.log(user)
     this.localStorage.setItem("user", JSON.stringify(user))
     this.login(user)
       .catch(
