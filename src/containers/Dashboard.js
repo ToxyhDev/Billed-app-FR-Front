@@ -86,7 +86,9 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
+    
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
+    console.log(this.counter + " edit " + bill.id)
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
       bills.forEach(b => {
@@ -105,6 +107,8 @@ export default class {
       $('.vertical-navbar').css({ height: '120vh' })
       this.counter ++
     }
+    console.log(this.counter + " edit " )
+
     $('#icon-eye-d').click(this.handleClickIconEye)
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
     $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
@@ -131,7 +135,15 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
+    if (this.counter === undefined || this.index !== index) {
+      // -> Check status open or close for init counter
+      const checkChildren = document.getElementById(`status-bills-container${index}`).childElementCount
+      if (checkChildren === 0) {
+        this.counter = 0
+      } else {
+        this.counter = 1
+      }
+    }
     if (this.index === undefined || this.index !== index) this.index = index
     if (this.counter % 2 === 0) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
@@ -144,8 +156,13 @@ export default class {
         .html("")
       this.counter ++
     }
+      // Supprimez les écouteurs d'événements existants
+    bills.forEach(bill => {
+      $(`#open-bill${bill.id}`).off('click');
+    });
 
     bills.forEach(bill => {
+      console.log(bill)
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
