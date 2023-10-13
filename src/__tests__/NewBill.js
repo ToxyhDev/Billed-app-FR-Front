@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import {screen, waitFor} from "@testing-library/dom"
+import {fireEvent, screen, waitFor} from "@testing-library/dom"
 import userEvent from '@testing-library/user-event'
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
@@ -76,6 +76,9 @@ describe("Given I am connected as an employee", () => {
       }))
       document.body.innerHTML = NewBillUI()
 
+      const jsdomAlert = window.alert;  // remember the jsdom alert
+      window.alert = () => {};  // provide an empty implementation for window.alert
+
       const newBill = new NewBill({
         document, onNavigate: null, store, bills, localStorage: window.localStorage
       })
@@ -100,14 +103,37 @@ describe("Given I am connected as an employee", () => {
 
       expect(file.reportValidity()).not.toBeTruthy()
 
+      window.alert = jsdomAlert;  // restore the jsdom alert
+
     })
 
-    // test("Then I click on the send button", () => {
+    test("Then I send my form data", () => {
 
-    // })
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+      type : 'Employee', email : 'example@test.com'
+      }))
+      document.body.innerHTML = NewBillUI()
 
-    // test("Then I send my form data", () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+        }
 
-    // })
+      const newBill = new NewBill({
+        document, onNavigate, store, bills, localStorage: window.localStorage
+      })
+
+      const buttonSubmit = screen.getByTestId('form-new-bill')
+
+      const handleSubmit = jest.fn((event) => newBill.handleSubmit(event))
+
+      buttonSubmit.addEventListener('submit', handleSubmit)
+
+      fireEvent.submit(buttonSubmit)
+      
+
+      expect(handleSubmit).toHaveBeenCalled()
+      expect(handleSubmit.email).toHaveBeenCalledWith('example@test.com')
+    })
   })
 })
