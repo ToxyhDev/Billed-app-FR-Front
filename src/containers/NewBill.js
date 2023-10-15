@@ -50,10 +50,7 @@ export default class NewBill {
   }
   handleSubmit = e => {
     e.preventDefault()
-    // const email = JSON.parse(localStorage.getItem("user")).email
-    const getEmail = JSON.parse(localStorage.getItem("user"))
-    const email = JSON.parse(getEmail).email
-    // => Je dois parse à nouveau car au premier parse j'obtient un String
+    const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
       type: e.target.querySelector(`select[data-testid="expense-type"]`).value,
@@ -67,7 +64,6 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
-    // console.log(bill)
     this.updateBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }

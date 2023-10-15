@@ -14,6 +14,7 @@ import store from "../__mocks__/store.js";
 import fs from 'fs'
 import path from "path";
 
+// jest.mock("../app/store", () => mockStore)
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
@@ -107,7 +108,7 @@ describe("Given I am connected as an employee", () => {
 
     })
 
-    test("Then I send my form data", () => {
+    test("Then I submit for send", () => {
 
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
@@ -129,11 +130,34 @@ describe("Given I am connected as an employee", () => {
 
       buttonSubmit.addEventListener('submit', handleSubmit)
 
-      fireEvent.submit(buttonSubmit)
-      
+      fireEvent.submit(buttonSubmit)      
 
       expect(handleSubmit).toHaveBeenCalled()
-      expect(handleSubmit.email).toHaveBeenCalledWith('example@test.com')
+    })
+  })
+
+  //POST Integration
+  describe("When I post new bill", () => {
+    test("Then bill from mock API POST", async () => {
+      jest.spyOn(mockStore, "bills")
+      const bill = {
+        "id": "47qAXb6fIm2zOKkLzMro",
+        "vat": "80",
+        "fileUrl": "https://firebasestorage.googleapis.com/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a",
+        "status": "pending",
+        "type": "Hôtel et logement",
+        "commentary": "séminaire billed",
+        "name": "encore",
+        "fileName": "preview-facture-free-201801-pdf-1.jpg",
+        "date": "2004-04-04",
+        "amount": 400,
+        "commentAdmin": "ok",
+        "email": "a@a",
+        "pct": 20
+      }
+      const postBill = await mockStore.bills().update(bill)
+
+      expect(postBill).toStrictEqual(bill)
     })
   })
 })

@@ -15,6 +15,8 @@ import {modal} from "../views/DashboardFormUI.js";
 import router from "../app/Router.js";
 import store from "../__mocks__/store.js";
 
+jest.mock("../app/store", () => mockStore)
+
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
     test("Then bill icon in vertical layout should be highlighted", async () => {
