@@ -8,13 +8,8 @@ import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
-import { bills } from "../fixtures/bills.js"
-import router from "../app/Router.js";
 import store from "../__mocks__/store.js";
-import fs from 'fs'
-import path from "path";
 
-// jest.mock("../app/store", () => mockStore)
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
@@ -58,7 +53,7 @@ describe("Given I am connected as an employee", () => {
 
       userEvent.upload(file, fileFake)
 
-      expect(file.files.length).toBe(1);
+      expect(file.files.length).toBe(1)
 
       const handleChangeFile = jest.fn(() => newBill.handleChangeFile)
 
@@ -77,34 +72,33 @@ describe("Given I am connected as an employee", () => {
       }))
       document.body.innerHTML = NewBillUI()
 
-      const jsdomAlert = window.alert;  // remember the jsdom alert
-      window.alert = () => {};  // provide an empty implementation for window.alert
+      // -> Remplace les alerte par une fonction vide
+      const jsdomAlert = window.alert
+      window.alert = () => {}
 
       const newBill = new NewBill({
         document, onNavigate: null, store, bills, localStorage: window.localStorage
       })
       const file = screen.getByTestId("file")
-      
+
+      // -> Créer un fichier factice
       const fileFake = new File([''], 'fake-file.txt', { type: 'text/plain' })
 
       userEvent.upload(file, fileFake)
 
-      expect(file.files.length).toBe(1);
+      expect(file.files.length).toBe(1)
 
 
       const handleChangeFile = jest.fn(() => newBill.handleChangeFile)
 
- 
-
       file.addEventListener('click', handleChangeFile)
       userEvent.click(file)
-
 
       expect(handleChangeFile).toHaveBeenCalled()
 
       expect(file.reportValidity()).not.toBeTruthy()
 
-      window.alert = jsdomAlert;  // restore the jsdom alert
+      window.alert = jsdomAlert; // restore les alert
 
     })
 
