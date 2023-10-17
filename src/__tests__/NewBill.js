@@ -8,7 +8,22 @@ import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
-import store from "../__mocks__/store.js";
+import store from "../__mocks__/store.js"
+import { bills } from "../fixtures/bills.js"
+
+
+// Sauvegarde de la méthode console.error d'origine
+const originalConsoleError = console.error
+
+// Remplace console.error par une fonction vide
+beforeAll(() => {
+  jest.spyOn(console, "error").mockImplementation(() => {})
+})
+
+// Restaure la méthode console.error d'origine après les tests
+afterAll(() => {
+  console.error = originalConsoleError  
+})
 
 
 describe("Given I am connected as an employee", () => {
@@ -152,6 +167,66 @@ describe("Given I am connected as an employee", () => {
       const postBill = await mockStore.bills().update(bill)
 
       expect(postBill).toStrictEqual(bill)
+    })
+  })
+
+  describe("When an error occurs on API", () => {
+    beforeEach( () => {
+      document.body.innerHTML = NewBillUI()
+
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+    })
+
+    test("Then post new bill fails with error 404", async () => {
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+
+      // -> Espionne la fonction si elle est appelé dans la console
+      const spyOn = jest.spyOn(console, "error")
+
+      // -> Mock d'objets pour créer erreur
+      const store = {
+        bills: jest.fn(() => newBill.store),
+        create: jest.fn(() => Promise.resolve({})),
+        update: jest.fn(() => Promise.reject(new Error("Erreur 404"))),
+      }
+
+      const newBill = new NewBill({ document, onNavigate, store, localStorage })
+
+      const formNewBill = screen.getByTestId("form-new-bill")
+      const handleSubmit = jest.fn(() => newBill.handleSubmit)
+      formNewBill.addEventListener("submit", handleSubmit)
+
+      fireEvent.submit(formNewBill)
+      await new Promise(process.nextTick)
+
+      expect(spyOn).toBeCalledWith(new Error("Erreur 404"))
+    })
+    test("Then post new bill fails with error 505", async () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      // -> Espionne la fonction si elle est appelé dans la console
+      const spyOn = jest.spyOn(console, "error")
+      // -> Mock d'objets pour créer erreur
+      const store = {
+        bills: jest.fn(() => newBill.store),
+        create: jest.fn(() => Promise.resolve({})),
+        update: jest.fn(() => Promise.reject(new Error("Erreur 505"))),
+      }
+      const newBill = new NewBill({ document, onNavigate, store, localStorage })
+
+      const formNewBill = screen.getByTestId("form-new-bill")
+      const handleSubmit = jest.fn(() => newBill.handleSubmit)
+      formNewBill.addEventListener("submit", handleSubmit)
+
+      fireEvent.submit(formNewBill)
+      await new Promise(process.nextTick)
+      expect(spyOn).toBeCalledWith(new Error("Erreur 505"))
     })
   })
 })
