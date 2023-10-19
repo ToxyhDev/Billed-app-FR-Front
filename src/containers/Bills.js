@@ -34,11 +34,12 @@ export default class {
       .list()
       .then(snapshot => {
         const bills = snapshot
+          .sort((a, b) => ((new Date(a.date) < new Date(b.date)) ? 1 : -1))
           .map(doc => {
             try {
               return {
                 ...doc,
-                date: formatDate(doc.date),
+                // date: formatDate(doc.date), //Régression du test lors de l'ajout du formatDate
                 status: formatStatus(doc.status)
               }
             } catch(e) {

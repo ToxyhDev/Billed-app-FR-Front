@@ -13,23 +13,21 @@ export const bills = [{
   "email": "a@a",
   "pct": 20
 },
-//  ---> Ce n'était pas dans le bon ordre pour le test mettre à la fin
-//        ordre décroissant.
-// {
-//   "id": "BeKy5Mo4jkmdfPGYpTxZ",
-//   "vat": "",
-//   "amount": 100,
-//   "name": "test1",
-//   "fileName": "1592770761.jpeg",
-//   "commentary": "plop",
-//   "pct": 20,
-//   "type": "Transports",
-//   "email": "a@a",
-//   "fileUrl": "https://test.storage.tld/v0/b/billable-677b6.a…61.jpeg?alt=media&token=7685cd61-c112-42bc-9929-8a799bb82d8b",
-//   "date": "2001-01-01",
-//   "status": "refused",
-//   "commentAdmin": "en fait non"
-// },
+{
+  "id": "BeKy5Mo4jkmdfPGYpTxZ",
+  "vat": "",
+  "amount": 100,
+  "name": "test1",
+  "fileName": "1592770761.jpeg",
+  "commentary": "plop",
+  "pct": 20,
+  "type": "Transports",
+  "email": "a@a",
+  "fileUrl": "https://test.storage.tld/v0/b/billable-677b6.a…61.jpeg?alt=media&token=7685cd61-c112-42bc-9929-8a799bb82d8b",
+  "date": "2001-01-01",
+  "status": "refused",
+  "commentAdmin": "en fait non"
+},
 {
   "id": "UIUZtnPQvnbFnB0ozvJh",
   "name": "test3",
@@ -59,20 +57,5 @@ export const bills = [{
   "commentary": "test2",
   "type": "Restaurants et bars",
   "fileUrl": "https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=4df6ed2c-12c8-42a2-b013-346c1346f732"
-},
-{
-  "id": "BeKy5Mo4jkmdfPGYpTxZ",
-  "vat": "",
-  "amount": 100,
-  "name": "test1",
-  "fileName": "1592770761.jpeg",
-  "commentary": "plop",
-  "pct": 20,
-  "type": "Transports",
-  "email": "a@a",
-  "fileUrl": "https://test.storage.tld/v0/b/billable-677b6.a…61.jpeg?alt=media&token=7685cd61-c112-42bc-9929-8a799bb82d8b",
-  "date": "2001-01-01",
-  "status": "refused",
-  "commentAdmin": "en fait non"
 }
 ]
