@@ -10,7 +10,7 @@ import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
 import Bills from "../containers/Bills.js";
-import {modal} from "../views/DashboardFormUI.js";
+// import {modal} from "../views/DashboardFormUI.js";
 
 import router from "../app/Router.js";
 import store from "../__mocks__/store.js";
@@ -96,7 +96,7 @@ describe("Given I am connected as an employee", () => {
         userEvent.click(iconEye)
 
         expect(handleClickIconEye).toHaveBeenCalled()
-        expect(modal).toBeTruthy()
+        expect($.fn.modal).toHaveBeenCalled()
       })
 
     })
@@ -152,9 +152,9 @@ describe("Given I am connected as an employee", () => {
         document, onNavigate: jest.fn(), store, localStorage: window.localStorage
       })
 
-      const result = bill.getBills(store)
+      const result = await bill.getBills()
 
-      expect(result.length).toEqual(store.length)
+      expect(result[0].date).toEqual("2004-04-04")
     })
 
   })
